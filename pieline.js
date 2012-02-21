@@ -7,16 +7,17 @@
  * License: MIT
  */
 
-function pieLine (data, canvas, style) {
+function pieLine (data, canvas, config) {
 
 	var data = normalize(data);	
 	var width = canvas.width();
 	var height = canvas.height();
 	var segmentRadiants = Math.PI*2 / data.length;
 
-	this.style = style ? style : {};
+	this.config = config ? config : {};
 	this.center = [width / 2, height / 2];
 	this.maxRadius = (width < height) ? height / 2.05 : width / 2.05;
+
 
 	plot = canvas[0].getContext('2d');	
 	plot.lineCap = "round";
@@ -32,13 +33,13 @@ function pieLine (data, canvas, style) {
 
 		plot.fill();
 		
-		if (style && (style.mask)) {
+		if (config && (config.mask)) {
 			this.drawSlice(
 				this.maxRadius,
 				segmentRadiants*i,
 				segmentRadiants*(i+1));
-			plot.strokeStyle = style.mask.color;
-			plot.lineWidth = style.mask.width;
+			plot.strokeStyle = config.mask.color;
+			plot.lineWidth = config.mask.width;
 			plot.stroke();			
 		}
 	}
@@ -60,9 +61,9 @@ pieLine.prototype.applyStyle = function (sliceValue) {
 			parseInt((cutHex(color)).substring(4,6),16)];
 	}
 	
-	var colors = this.style.colors?this.style.colors:['#FFD700','#FF0000'];
+	var colors = this.config.colors?this.config.colors:['#FFD700','#FF0000'];
 
-	switch (this.style.type) {
+	switch (this.config.fillType) {
 
 		case null:
 		case undefined:
@@ -98,9 +99,9 @@ pieLine.prototype.applyStyle = function (sliceValue) {
 		break;
 	}
 
-	if (this.style.stroke) {
-		plot.strokeStyle = this.style.stroke.color;
-		plot.lineWidth = this.style.stroke.width;
+	if (this.config.stroke) {
+		plot.strokeStyle = this.config.stroke.color;
+		plot.lineWidth = this.config.stroke.width;
 		plot.stroke();
 	}
 }
