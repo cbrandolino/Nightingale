@@ -1,9 +1,9 @@
 var data = [
-	{name: 'red', value: 10},
-	{name: 'blue', value: 30},
-	{name: 'blue', value:40},
-	{name: 'blue', value: 30},
-	{name: 'blue', value:140}
+	{name: 'a', value: 10},
+	{name: 'b', value: 30},
+	{name: 'c', value:40},
+	{name: 'd', value: 30},
+	{name: 'e', value:140}
 ];
 
 $(function() {
