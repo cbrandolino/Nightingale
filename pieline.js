@@ -12,12 +12,14 @@ function pieLine (data, canvas, config) {
 	var data = normalize(data);	
 	var width = canvas.width();
 	var height = canvas.height();
-	var segmentRadiants = Math.PI*2 / data.length;
+	var segmentRadians = Math.PI*2 / data.length;
 
+	
 	this.config = config ? config : {};
 	this.center = [width / 2, height / 2];
 	this.maxRadius = (width < height) ? height / 2.05 : width / 2.05;
-
+	this.canvas = canvas;
+	this.segmentRadians = segmentRadians;
 
 	plot = canvas[0].getContext('2d');	
 	plot.lineCap = "round";
@@ -27,21 +29,61 @@ function pieLine (data, canvas, config) {
 
 		this.drawSlice(
 			this.maxRadius * data[i].normalValue,
-			segmentRadiants*i,
-			segmentRadiants*(i+1));
+			segmentRadians*i,
+			segmentRadians*(i+1));
 		this.applyStyle(data[i].normalValue);
 
-		plot.fill();
-		
+		plot.fill();	
+
 		if (config && (config.mask)) {
 			this.drawSlice(
 				this.maxRadius,
-				segmentRadiants*i,
-				segmentRadiants*(i+1));
+				segmentRadians*i,
+				segmentRadians*(i+1));
 			plot.strokeStyle = config.mask.color;
 			plot.lineWidth = config.mask.width;
 			plot.stroke();			
 		}
+	}
+	
+
+	var self = this;
+	self.data = data;
+
+	if (this.config.click) {
+		canvas.click(function(e) {
+			self.userCallback(e);
+		});
+	}
+
+	if (this.config.hover) {
+		canvas.mousemove(function(e) {
+			self.userCallback(e);
+		});
+	}
+}
+
+pieLine.prototype.userCallback = function (e) {
+
+	var mousePos = [
+		Math.floor(e.pageX - this.canvas.offset().left),
+		Math.floor(e.pageY - this.canvas.offset().top)];
+
+	var mousePosCenter = [
+		mousePos[0] - this.center[0],
+		-(mousePos[1] - this.center[1])];
+	
+	var fromCenter = Math.sqrt(
+		Math.pow(Math.abs(mousePosCenter[0]),2) +
+		Math.pow(Math.abs(mousePosCenter[1]),2));
+
+	if (fromCenter < this.maxRadius) {
+		var mouseAngleAbs = Math.atan2(mousePosCenter[0],mousePosCenter[1]) - Math.PI/2;
+		var mouseAngle = (mouseAngleAbs >= 0) 
+			? mouseAngleAbs 
+			: mouseAngleAbs + 2 * Math.PI;
+		var mouseSector = Math.floor(mouseAngle / this.segmentRadians);
+		this.config.click(data[mouseSector]);
 	}
 }
 
