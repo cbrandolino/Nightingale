@@ -1,14 +1,11 @@
-function normalize(data) {
-	var maxval = data.reduce(function (a, b) {
-		return Math.max(a, b.value);
-	}, 0);
-
-	for (i = 0; i < data.length; i++)
-		data[i].normalValue = Math.round(data[i].value / maxval*1000) 
-			/ 1000;
-	
-	return data;
-}
+/*!
+ * PieLine circular bar graph plotter
+ * http://github.com/cbrandolino/PieLine
+ *
+ * Author: Claudio Brandolino
+ * 
+ * License: MIT
+ */
 
 function pieLine (data, canvas, style) {
 
@@ -106,4 +103,16 @@ pieLine.prototype.applyStyle = function (sliceValue) {
 		plot.lineWidth = this.style.stroke.width;
 		plot.stroke();
 	}
+}
+
+function normalize(data) {
+	var maxval = data.reduce(function (a, b) {
+		return Math.max(a, b.value);
+	}, 0);
+
+	for (i = 0; i < data.length; i++)
+		data[i].normalValue = Math.round(data[i].value / maxval*1000) 
+			/ 1000;
+	
+	return data;
 }
