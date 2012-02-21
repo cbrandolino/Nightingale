@@ -4,7 +4,8 @@ function normalize(data) {
 	}, 0);
 
 	for (i = 0; i < data.length; i++)
-		data[i].normalValue = Math.round(data[i].value / maxval*1000) / 1000;
+		data[i].normalValue = Math.round(data[i].value / maxval*1000) 
+			/ 1000;
 	
 	return data;
 }
