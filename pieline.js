@@ -35,7 +35,10 @@ function pieLine (data, canvas, style) {
 		plot.fill();
 		
 		if (style && (style.mask)) {
-			this.drawSlice(this.maxRadius,segmentRadiants*i,segmentRadiants*(i+1));
+			this.drawSlice(
+				this.maxRadius,
+				segmentRadiants*i,
+				segmentRadiants*(i+1));
 			plot.strokeStyle = style.mask.color;
 			plot.lineWidth = style.mask.width;
 			plot.stroke();			
