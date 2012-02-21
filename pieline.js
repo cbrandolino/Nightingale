@@ -44,6 +44,7 @@ function pieLine (data, canvas, config) {
 			plot.lineWidth = config.mask.width;
 			plot.stroke();			
 		}
+
 	}
 	
 
@@ -51,19 +52,20 @@ function pieLine (data, canvas, config) {
 	self.data = data;
 
 	if (this.config.click) {
+		if (this.config.click)
 		canvas.click(function(e) {
-			self.userCallback(e);
+			self.userCallback(e, 'click');
 		});
 	}
 
 	if (this.config.hover) {
 		canvas.mousemove(function(e) {
-			self.userCallback(e);
+			self.userCallback(e, 'hover');
 		});
 	}
 }
 
-pieLine.prototype.userCallback = function (e) {
+pieLine.prototype.userCallback = function (e, eventType) {
 
 	var mousePos = [
 		Math.floor(e.pageX - this.canvas.offset().left),
@@ -83,7 +85,21 @@ pieLine.prototype.userCallback = function (e) {
 			? mouseAngleAbs 
 			: mouseAngleAbs + 2 * Math.PI;
 		var mouseSector = Math.floor(mouseAngle / this.segmentRadians);
-		this.config.click(data[mouseSector]);
+
+		if (typeof (this.config[eventType]) == "function") {
+			this.config[eventType]({
+				'slice':data[mouseSector],
+				'topLeftPos':mousePos,
+				'centerPos':mousePosCenter });
+		} else {
+			switch (this.config[eventType]) {
+				case 'tooltip':
+					createTooltip(data[mouseSector], e);
+				break;
+
+			}
+
+		}
 	}
 }
 
@@ -158,4 +174,11 @@ function normalize(data) {
 			/ 1000;
 	
 	return data;
+}
+
+function createTooltip(content, e) {
+	var tooltip =
+		$('p').text(content.name)
+		.css({'position':'absolute','left':e.pageX,'right':e.pageY});
+	$('body').append(tooltip);
 }
