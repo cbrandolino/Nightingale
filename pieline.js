@@ -49,10 +49,11 @@ function plotPie (data, canvas, style) {
 		plot.moveTo(center[0],center[1]);
 		plot.arc(center[0],center[1],maxRadius*data[i].normalValue,segmentRadiants*i,segmentRadiants*(i+1),false);
 		plot.lineTo(center[0],center[1]);
-		applyStyle(style, maxRadius,data[i].normalValue);
+		if (style)
+			applyStyle(style, maxRadius,data[i].normalValue);
 		plot.fill();
 		
-		if (style.mask) {
+		if (style && (style.mask)) {
 			plot.beginPath();
 			plot.moveTo(center[0],center[1]);
 			plot.arc(center[0],center[1],maxRadius,segmentRadiants*i,segmentRadiants*(i+1),false);
