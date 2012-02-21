@@ -7,6 +7,6 @@ var data = [
 ];
 
 $(function() {
-	window.pieObj = new pieLine(data, $('#canvas'));
+	window.pieObj = new pieLine(data, $('#canvas'), {'type':'gradient', 'colors':['#ff0000','#0000ff'], 'stroke': {'color':'#000000','width':4}});
 });
 
