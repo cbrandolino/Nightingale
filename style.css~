@@ -1,5 +1,7 @@
-#canvas {
-	width:300px;
-	height: 300px;
-	border: 1px solid black;
+td {
+	padding:10px;
+	text-align:center;
+}
+tr {
+	border-bottom: 1px solid black;
 }
