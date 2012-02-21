@@ -38,8 +38,11 @@ function plotPie (data, canvas, style) {
 	var maxRadius = (width < height) ? height/2.05 : width/2.05;
 
 
-	var plot = canvas[0].getContext('2d');
 	var segmentRadiants = Math.PI*2/data.length;
+
+	var plot = canvas[0].getContext('2d');	
+	plot.lineCap = "round";
+	plot.lineJoin = "round";
 
 	for (i = 0; i < data.length; i++) {
 		plot.beginPath();
@@ -48,6 +51,16 @@ function plotPie (data, canvas, style) {
 		plot.lineTo(center[0],center[1]);
 		applyStyle(style, maxRadius,data[i].normalValue);
 		plot.fill();
+		
+		if (style.mask) {
+			plot.beginPath();
+			plot.moveTo(center[0],center[1]);
+			plot.arc(center[0],center[1],maxRadius,segmentRadiants*i,segmentRadiants*(i+1),false);
+			plot.lineTo(center[0],center[1]);
+			plot.strokeStyle = style.mask.color;
+			plot.lineWidth = style.mask.width;
+			plot.stroke();			
+		}
 	}
 
 	function applyStyle(style, maxRadius, value) { 
@@ -83,8 +96,6 @@ function plotPie (data, canvas, style) {
 		}
 		if (style.stroke) {
 			plot.strokeStyle = style.stroke.color;
-			plot.lineCap = "round";
-			plot.lineJoin = "round";
 			plot.lineWidth = style.stroke.width;
 			plot.stroke();
 		}
