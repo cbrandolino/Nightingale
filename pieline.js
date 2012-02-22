@@ -87,19 +87,13 @@ pieLine.prototype.userCallback = function (e, eventType) {
 		var mouseSector = Math.floor(mouseAngle / this.segmentRadians);
 
 		if (typeof (this.config[eventType]) == "function") {
+			// It could be a string in case we want to 
+			// implement some standard functions.
 			this.config[eventType]({
 				'slice':data[mouseSector],
 				'topLeftPos':mousePos,
 				'centerPos':mousePosCenter });
-		} else {
-			switch (this.config[eventType]) {
-				case 'tooltip':
-					createTooltip(data[mouseSector], e);
-				break;
-
-			}
-
-		}
+		} 
 	}
 }
 
@@ -176,9 +170,3 @@ function normalize(data) {
 	return data;
 }
 
-function createTooltip(content, e) {
-	var tooltip =
-		$('p').text(content.name)
-		.css({'position':'absolute','left':e.pageX,'right':e.pageY});
-	$('body').append(tooltip);
-}
